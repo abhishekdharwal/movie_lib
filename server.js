@@ -24,6 +24,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.set("view engine", "ejs");
+app.use(function (request, response, next) {
+  response.header("Access-Control-Allow-Origin", "*");
+  response.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 app.use(router);
 
 // app.get("/register", (req, res) => {
@@ -42,6 +50,7 @@ app.use(router);
 //     res.render("login");
 //   }
 // );
+
 app.post("/register", async (req, res) => {
   const user = await MovieUser.findOne({ username: req.body.username });
   if (user) return res.status(400).send("User Exists");
